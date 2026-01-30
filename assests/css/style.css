@@ -195,4 +195,20 @@ a:hover {
     box-shadow: 0 6px 14px rgba(0,0,0,0.2);
 }
 
-/
+* ===============================
+   LOGIN PAGE LAYOUT
+================================ */
+.login-page header {
+    text-align: center;
+}
+
+.login-page header h1 {
+    margin-bottom: 0;
+}
+
+/* ===============================
+   APP (AFTER LOGIN) LAYOUT
+================================ */
+.app-page header {
+    text-align: left;
+}
