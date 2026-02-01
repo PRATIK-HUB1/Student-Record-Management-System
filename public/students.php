@@ -1,7 +1,7 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // layout + navigation
+require_once "../includes/auth.php";
+require_once "../config/db.php";
+require_once "../includes/header.php";
 
 /* -----------------------
    HANDLE CREATE
@@ -12,28 +12,30 @@ if (isset($_POST['add_student'])) {
     $course_id = $_POST['course_id'];
 
     if ($name && $email) {
+        // Insert student
         $stmt = $pdo->prepare(
-    "INSERT INTO students (name, email, course_id)
-     VALUES (:name, :email, :course_id)"
-);
-$stmt->execute([
-    "name" => $name,
-    "email" => $email,
-    "course_id" => $course_id ?: null
-]);
+            "INSERT INTO students (name, email, course_id)
+             VALUES (:name, :email, :course_id)"
+        );
+        $stmt->execute([
+            "name" => $name,
+            "email" => $email,
+            "course_id" => $course_id ?: null
+        ]);
 
-$lastId = $pdo->lastInsertId();
+        // Generate roll number
+        $lastId = $pdo->lastInsertId();
+        $rollNumber = "ROLL-" . str_pad($lastId, 3, "0", STR_PAD_LEFT);
 
-$rollNumber = "ROLL-" . str_pad($lastId, 3, "0", STR_PAD_LEFT);
-
-$update = $pdo->prepare(
-    "UPDATE students SET roll_number = :roll WHERE student_id = :id"
-);
-$update->execute([
-    "roll" => $rollNumber,
-    "id"   => $lastId
-]);
+        $update = $pdo->prepare(
+            "UPDATE students SET roll_number = :roll WHERE student_id = :id"
+        );
+        $update->execute([
+            "roll" => $rollNumber,
+            "id"   => $lastId
+        ]);
     }
+
     header("Location: students.php");
     exit();
 }
@@ -62,7 +64,9 @@ if (isset($_POST['update_student'])) {
 
     $stmt = $pdo->prepare(
         "UPDATE students
-         SET name = :name, email = :email, course_id = :course_id
+         SET name = :name,
+             email = :email,
+             course_id = :course_id
          WHERE student_id = :id"
     );
     $stmt->execute([
@@ -90,9 +94,8 @@ $students = $pdo->query(
      LEFT JOIN courses ON students.course_id = courses.course_id"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-$courses = $pdo->query(
-    "SELECT * FROM courses"
-)->fetchAll(PDO::FETCH_ASSOC);
+$courses = $pdo->query("SELECT * FROM courses")
+               ->fetchAll(PDO::FETCH_ASSOC);
 
 /* -----------------------
    EDIT MODE
@@ -120,12 +123,12 @@ if (isset($_GET['edit'])) {
 
     <label>Name</label><br>
     <input type="text" name="name" required
-        value="<?php echo htmlspecialchars($editStudent['name'] ?? ''); ?>">
+           value="<?php echo htmlspecialchars($editStudent['name'] ?? ''); ?>">
     <br><br>
 
     <label>Email</label><br>
     <input type="email" name="email" required
-        value="<?php echo htmlspecialchars($editStudent['email'] ?? ''); ?>">
+           value="<?php echo htmlspecialchars($editStudent['email'] ?? ''); ?>">
     <br><br>
 
     <label>Course</label><br>
@@ -133,12 +136,7 @@ if (isset($_GET['edit'])) {
         <option value="">-- Select Course --</option>
         <?php foreach ($courses as $course): ?>
             <option value="<?php echo $course['course_id']; ?>"
-                <?php
-                if ($editStudent &&
-                    $editStudent['course_id'] == $course['course_id']) {
-                    echo "selected";
-                }
-                ?>>
+                <?php if ($editStudent && $editStudent['course_id'] == $course['course_id']) echo "selected"; ?>>
                 <?php echo htmlspecialchars($course['course_name']); ?>
             </option>
         <?php endforeach; ?>
@@ -156,43 +154,43 @@ if (isset($_GET['edit'])) {
 <h3>Search Students (Ajax)</h3>
 
 <input type="text" id="studentSearch"
-       placeholder="Type student name..."
+       placeholder="Type name, roll number, or email..."
        autocomplete="off">
-
-<ul id="searchResults"></ul>
 
 <hr>
 
 <h3>Student List</h3>
 
 <table border="1" cellpadding="5">
-    <tr>
-        <th>ID</th>
-        <th>Roll Number</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Course</th>
-        <th>Actions</th>
-    </tr>
-
-    <?php foreach ($students as $student): ?>
+    <thead>
         <tr>
-            <td><?php echo $student['student_id']; ?></td>
-<td><?php echo htmlspecialchars($student['roll_number']); ?></td>
-<td><?php echo htmlspecialchars($student['name']); ?></td>
-<td><?php echo htmlspecialchars($student['email']); ?></td>
-<td><?php echo htmlspecialchars($student['course_name'] ?? ''); ?></td>
-<td>
-    <a href="students.php?edit=<?php echo $student['student_id']; ?>">Edit</a> |
-    <a href="students.php?delete=<?php echo $student['student_id']; ?>"
-       onclick="return confirm('Delete this student?');">Delete</a>
-</td>
+            <th>ID</th>
+            <th>Roll Number</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>Actions</th>
         </tr>
-    <?php endforeach; ?>
+    </thead>
+
+    <tbody id="studentsTableBody">
+        <?php foreach ($students as $student): ?>
+            <tr>
+                <td><?php echo $student['student_id']; ?></td>
+                <td><?php echo htmlspecialchars($student['roll_number']); ?></td>
+                <td><?php echo htmlspecialchars($student['name']); ?></td>
+                <td><?php echo htmlspecialchars($student['email']); ?></td>
+                <td><?php echo htmlspecialchars($student['course_name'] ?? ''); ?></td>
+                <td>
+                    <a href="students.php?edit=<?php echo $student['student_id']; ?>">Edit</a> |
+                    <a href="students.php?delete=<?php echo $student['student_id']; ?>"
+                       onclick="return confirm('Delete this student?');">Delete</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
 </table>
 
 <script src="../assets/js/student_search.js"></script>
 
-<?php
-require_once "../includes/footer.php";   // layout footer
-?>
+<?php require_once "../includes/footer.php"; ?>

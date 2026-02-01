@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Student Record Management System</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/Student_Record_Management_System/assets/css/style.css">
+
 </head>
 
 <body class="<?php echo isset($_SESSION['admin_id']) ? 'app-page' : 'login-page'; ?>">
@@ -10,7 +11,7 @@
 <header>
     <h1>Student Record Management System</h1>
 
-    <?php if (isset($_SESSION["admin_id"])): ?>
+    <?php if (isset($_SESSION['admin_id'])): ?>
         <nav>
             <a href="dashboard.php">Dashboard</a>
             <a href="students.php">Students</a>

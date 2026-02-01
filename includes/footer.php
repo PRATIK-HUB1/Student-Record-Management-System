@@ -1,7 +1,7 @@
 </main>
 
 <footer>
-    <p>&copy; <?php echo date("Y"); ?> Student Record Management System</p>
+    © 2026 Student Record Management System
 </footer>
 
 </body>

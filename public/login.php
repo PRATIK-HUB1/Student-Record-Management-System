@@ -5,12 +5,10 @@ require_once "../config/db.php";
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
 
-    if (!empty($username) && !empty($password)) {
-
+    if ($username && $password) {
         $stmt = $pdo->prepare(
             "SELECT * FROM admins WHERE username = :username"
         );
@@ -25,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $error = "Invalid username or password";
         }
-
     } else {
         $error = "All fields are required";
     }
@@ -37,7 +34,7 @@ require_once "../includes/header.php";
 <div class="login-container">
     <h2>Admin Login</h2>
 
-    <?php if (!empty($error)): ?>
+    <?php if ($error): ?>
         <p class="error"><?php echo htmlspecialchars($error); ?></p>
     <?php endif; ?>
 
@@ -52,6 +49,4 @@ require_once "../includes/header.php";
     </form>
 </div>
 
-<?php
-require_once "../includes/footer.php";
-?>
+<?php require_once "../includes/footer.php"; ?>

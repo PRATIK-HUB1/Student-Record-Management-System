@@ -1,15 +1,20 @@
+
+
+
 <?php
 $host = "localhost";
 $dbname = "student_record_system";
-$username = "root";      
+$username = "root";
+$password = "";   // ← THIS WAS MISSING
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=UTF8",
+        "mysql:host=$host;dbname=$dbname;charset=utf8",
         $username,
         $password
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed");
+    die("Database connection failed: " . $e->getMessage());
 }
+
