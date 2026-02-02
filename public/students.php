@@ -6,37 +6,42 @@ require_once "../includes/header.php";
 
 /* HANDLE CREATE*/
 if (isset($_POST['add_student'])) {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $course_id = $_POST['course_id'];
+    try {
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $course_id = $_POST['course_id'];
 
-    if ($name && $email) {
-        // Insert student
-        $stmt = $pdo->prepare(
-            "INSERT INTO students (name, email, course_id)
-             VALUES (:name, :email, :course_id)"
-        );
-        $stmt->execute([
-            "name" => $name,
-            "email" => $email,
-            "course_id" => $course_id ?: null
-        ]);
+        if ($name && $email) {
+            // Insert student
+            $stmt = $pdo->prepare(
+                "INSERT INTO students (name, email, course_id)
+                 VALUES (:name, :email, :course_id)"
+            );
+            $stmt->execute([
+                "name" => $name,
+                "email" => $email,
+                "course_id" => $course_id ?: null
+            ]);
 
-        // Generate roll number
-        $lastId = $pdo->lastInsertId();
-        $rollNumber = "ROLL-" . str_pad($lastId, 3, "0", STR_PAD_LEFT);
+            // Generate roll number
+            $lastId = $pdo->lastInsertId();
+            $rollNumber = "ROLL-" . str_pad($lastId, 3, "0", STR_PAD_LEFT);
 
-        $update = $pdo->prepare(
-            "UPDATE students SET roll_number = :roll WHERE student_id = :id"
-        );
-        $update->execute([
-            "roll" => $rollNumber,
-            "id"   => $lastId
-        ]);
+            $update = $pdo->prepare(
+                "UPDATE students SET roll_number = :roll WHERE student_id = :id"
+            );
+            $update->execute([
+                "roll" => $rollNumber,
+                "id"   => $lastId
+            ]);
+        }
+
+        header("Location: students.php");
+        exit();
+
+    } catch (PDOException $e) {
+        die("Error adding student: " . $e->getMessage());
     }
-
-    header("Location: students.php");
-    exit();
 }
 
 /* HANDLE DELETE */
