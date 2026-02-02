@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Student Record Management System</title>
-    <link rel="stylesheet" href="/Student_Record_Management_System/assets/css/style.css">
+    <link rel="stylesheet" href="../public/assets/css/style.css">
 
 </head>
 

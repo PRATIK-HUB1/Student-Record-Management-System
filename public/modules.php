@@ -1,11 +1,9 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // layout + navigation
+require_once "../includes/auth.php";     
+require_once "../config/db.php";         
+require_once "../includes/header.php";   
 
-/* -----------------------
-   HANDLE CREATE
------------------------ */
+/* HANDLE CREATE */
 if (isset($_POST['add_module'])) {
     $module_name = trim($_POST['module_name']);
     $course_id = $_POST['course_id'];
@@ -24,9 +22,7 @@ if (isset($_POST['add_module'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE DELETE
------------------------ */
+/* HANDLE DELETE */
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
@@ -39,9 +35,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE UPDATE
------------------------ */
+/* HANDLE UPDATE */
 if (isset($_POST['update_module'])) {
     $id = $_POST['module_id'];
     $module_name = trim($_POST['module_name']);
@@ -62,9 +56,7 @@ if (isset($_POST['update_module'])) {
     exit();
 }
 
-/* -----------------------
-   FETCH DATA
------------------------ */
+/*  FETCH DATA */
 $modules = $pdo->query(
     "SELECT modules.*, courses.course_name
      FROM modules
@@ -75,9 +67,7 @@ $courses = $pdo->query(
     "SELECT * FROM courses"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-/* -----------------------
-   EDIT MODE
------------------------ */
+/* EDIT MODE */
 $editModule = null;
 if (isset($_GET['edit'])) {
     $stmt = $pdo->prepare(
@@ -89,7 +79,6 @@ if (isset($_GET['edit'])) {
 ?>
 
 <h2>Manage Modules</h2>
-<a href="dashboard.php">← Back to Dashboard</a>
 
 <hr>
 

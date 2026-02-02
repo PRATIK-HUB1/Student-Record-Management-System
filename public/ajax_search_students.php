@@ -11,10 +11,15 @@ $stmt = $pdo->prepare(
      LIMIT 10"
 );
 
-$stmt->execute([
-    "term" => "%" . $term . "%"
-]);
+try {
+    $stmt->execute([
+        "term" => "%" . $term . "%"
+    ]);
 
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo json_encode(['error' => $e->getMessage()]);
+    exit;
+}
 
 echo json_encode($results);

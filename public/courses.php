@@ -1,11 +1,9 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // layout + navigation
+require_once "../includes/auth.php";     
+require_once "../config/db.php";         
+require_once "../includes/header.php";   
 
-/* -----------------------
-   HANDLE CREATE
------------------------ */
+/* HANDLE CREATE */
 if (isset($_POST['add_course'])) {
     $course_name = trim($_POST['course_name']);
 
@@ -22,9 +20,7 @@ if (isset($_POST['add_course'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE DELETE
------------------------ */
+/*HANDLE DELETE */
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
@@ -37,9 +33,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE UPDATE
------------------------ */
+/* HANDLE UPDATE */
 if (isset($_POST['update_course'])) {
     $id = $_POST['course_id'];
     $course_name = trim($_POST['course_name']);
@@ -58,16 +52,12 @@ if (isset($_POST['update_course'])) {
     exit();
 }
 
-/* -----------------------
-   FETCH DATA
------------------------ */
+/* FETCH DATA*/
 $courses = $pdo->query(
     "SELECT * FROM courses"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-/* -----------------------
-   EDIT MODE
------------------------ */
+/* EDIT MODE*/
 $editCourse = null;
 if (isset($_GET['edit'])) {
     $stmt = $pdo->prepare(
@@ -79,7 +69,6 @@ if (isset($_GET['edit'])) {
 ?>
 
 <h2>Manage Courses</h2>
-<a href="dashboard.php">← Back to Dashboard</a>
 
 <hr>
 
@@ -131,5 +120,5 @@ if (isset($_GET['edit'])) {
 </table>
 
 <?php
-require_once "../includes/footer.php";   // layout footer
+require_once "../includes/footer.php";   
 ?>

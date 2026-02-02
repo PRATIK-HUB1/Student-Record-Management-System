@@ -1,39 +1,54 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // page header + nav
+require_once "../includes/auth.php";
+require_once "../config/db.php";
+require_once "../includes/header.php";
 ?>
-<h2>Welcome, <?php echo htmlspecialchars($_SESSION["admin_username"]); ?></h2>
 
-<div class="dashboard-grid">
+<div class="dashboard-container">
 
-    <a href="students.php" class="dashboard-card">
-        <h3>Students</h3>
-        <p>Manage student records</p>
-    </a>
+    <div class="dashboard-header">
+        <h2>Welcome to Student Record Management System</h2>
 
-    <a href="courses.php" class="dashboard-card">
-        <h3>Courses</h3>
-        <p>Manage courses</p>
-    </a>
+        <p class="dashboard-subtitle">
+            Use the sections below to manage student records and academic data.
+        </p>
+    </div>
 
-    <a href="modules.php" class="dashboard-card">
-        <h3>Modules</h3>
-        <p>Assign modules to courses</p>
-    </a>
+    <div class="dashboard-section">
+        <h3 class="section-title">Quick Access</h3>
 
-    <a href="grades.php" class="dashboard-card">
-        <h3>Grades</h3>
-        <p>Assign grades (A–F)</p>
-    </a>
+        <div class="dashboard-grid">
 
-    <a href="attendance.php" class="dashboard-card">
-        <h3>Attendance</h3>
-        <p>Track student attendance</p>
-    </a>
+            <a href="students.php" class="dashboard-card">
+                <h3>Students</h3>
+                <p>Manage student records</p>
+            </a>
+
+            <a href="courses.php" class="dashboard-card">
+                <h3>Courses</h3>
+                <p>Manage courses</p>
+            </a>
+
+            <a href="modules.php" class="dashboard-card">
+                <h3>Modules</h3>
+                <p>Assign modules to courses</p>
+            </a>
+
+            <a href="grades.php" class="dashboard-card">
+                <h3>Grades</h3>
+                <p>Assign grades (A–F)</p>
+            </a>
+
+            <a href="attendance.php" class="dashboard-card">
+                <h3>Attendance</h3>
+                <p>Track student attendance</p>
+            </a>
+
+        </div>
+    </div>
 
 </div>
 
 <?php
-require_once "../includes/footer.php";   // page footer
+require_once "../includes/footer.php";
 ?>

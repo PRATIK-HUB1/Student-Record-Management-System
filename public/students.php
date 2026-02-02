@@ -1,11 +1,10 @@
 <?php
+
 require_once "../includes/auth.php";
 require_once "../config/db.php";
 require_once "../includes/header.php";
 
-/* -----------------------
-   HANDLE CREATE
------------------------ */
+/* HANDLE CREATE*/
 if (isset($_POST['add_student'])) {
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
@@ -40,9 +39,7 @@ if (isset($_POST['add_student'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE DELETE
------------------------ */
+/* HANDLE DELETE */
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
@@ -53,9 +50,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE UPDATE
------------------------ */
+/* HANDLE UPDATE */
 if (isset($_POST['update_student'])) {
     $id = $_POST['student_id'];
     $name = trim($_POST['name']);
@@ -80,26 +75,26 @@ if (isset($_POST['update_student'])) {
     exit();
 }
 
-/* -----------------------
-   FETCH DATA
------------------------ */
-$students = $pdo->query(
-    "SELECT students.student_id,
-            students.roll_number,
-            students.name,
-            students.email,
-            students.course_id,
-            courses.course_name
-     FROM students
-     LEFT JOIN courses ON students.course_id = courses.course_id"
-)->fetchAll(PDO::FETCH_ASSOC);
+/* FETCH DATA */
+try {
+    $students = $pdo->query(
+        "SELECT students.student_id,
+                students.roll_number,
+                students.name,
+                students.email,
+                students.course_id,
+                courses.course_name
+         FROM students
+         LEFT JOIN courses ON students.course_id = courses.course_id"
+    )->fetchAll(PDO::FETCH_ASSOC);
 
-$courses = $pdo->query("SELECT * FROM courses")
-               ->fetchAll(PDO::FETCH_ASSOC);
+    $courses = $pdo->query("SELECT * FROM courses")
+                   ->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error fetching data: " . $e->getMessage());
+}
 
-/* -----------------------
-   EDIT MODE
------------------------ */
+/* EDIT MODE */
 $editStudent = null;
 if (isset($_GET['edit'])) {
     $stmt = $pdo->prepare("SELECT * FROM students WHERE student_id = :id");
@@ -109,7 +104,6 @@ if (isset($_GET['edit'])) {
 ?>
 
 <h2>Manage Students</h2>
-<a href="dashboard.php">← Back to Dashboard</a>
 
 <hr>
 

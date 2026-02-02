@@ -1,11 +1,9 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // layout + navigation
+require_once "../includes/auth.php";     
+require_once "../config/db.php";         
+require_once "../includes/header.php";   
 
-/* -----------------------
-   HANDLE CREATE
------------------------ */
+/*  HANDLE CREATE*/
 if (isset($_POST['add_grade'])) {
     $student_id = $_POST['student_id'];
     $module_id  = $_POST['module_id'];
@@ -26,9 +24,7 @@ if (isset($_POST['add_grade'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE DELETE
------------------------ */
+/*HANDLE DELETE */
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
@@ -39,9 +35,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE UPDATE
------------------------ */
+/* HANDLE UPDATE */
 if (isset($_POST['update_grade'])) {
     $id         = $_POST['grade_id'];
     $student_id = $_POST['student_id'];
@@ -66,9 +60,7 @@ if (isset($_POST['update_grade'])) {
     exit();
 }
 
-/* -----------------------
-   FETCH DATA
------------------------ */
+/*FETCH DATA*/
 $grades = $pdo->query(
     "SELECT g.grade_id, g.grade,
             s.name AS student_name,
@@ -86,9 +78,7 @@ $modules = $pdo->query(
     "SELECT module_id, module_name FROM modules"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-/* -----------------------
-   EDIT MODE
------------------------ */
+/* EDIT MODE*/
 $editGrade = null;
 if (isset($_GET['edit'])) {
     $stmt = $pdo->prepare("SELECT * FROM grades WHERE grade_id = :id");
@@ -98,7 +88,6 @@ if (isset($_GET['edit'])) {
 ?>
 
 <h2>Manage Grades</h2>
-<a href="dashboard.php">← Back to Dashboard</a>
 
 <hr>
 

@@ -1,11 +1,9 @@
 <?php
-require_once "../includes/auth.php";     // protect page
-require_once "../config/db.php";         // database
-require_once "../includes/header.php";   // layout + navigation
+require_once "../includes/auth.php";    
+require_once "../config/db.php";        
+require_once "../includes/header.php";   
 
-/* -----------------------
-   HANDLE CREATE
------------------------ */
+/* HANDLE CREATE*/
 if (isset($_POST['add_attendance'])) {
     $student_id = $_POST['student_id'];
     $module_id  = $_POST['module_id'];
@@ -28,9 +26,7 @@ if (isset($_POST['add_attendance'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE DELETE
------------------------ */
+/* HANDLE DELETE*/
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
 
@@ -43,9 +39,7 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-/* -----------------------
-   HANDLE UPDATE
------------------------ */
+/* HANDLE UPDATE*/
 if (isset($_POST['update_attendance'])) {
     $id         = $_POST['attendance_id'];
     $student_id = $_POST['student_id'];
@@ -73,9 +67,7 @@ if (isset($_POST['update_attendance'])) {
     exit();
 }
 
-/* -----------------------
-   FETCH DATA
------------------------ */
+/*FETCH DATA */
 $attendance = $pdo->query(
     "SELECT a.attendance_id, a.status, a.attendance_date,
             s.name AS student_name,
@@ -94,9 +86,7 @@ $modules = $pdo->query(
     "SELECT module_id, module_name FROM modules"
 )->fetchAll(PDO::FETCH_ASSOC);
 
-/* -----------------------
-   EDIT MODE
------------------------ */
+/* EDIT MODE */
 $editAttendance = null;
 if (isset($_GET['edit'])) {
     $stmt = $pdo->prepare(
@@ -108,7 +98,6 @@ if (isset($_GET['edit'])) {
 ?>
 
 <h2>Manage Attendance</h2>
-<a href="dashboard.php">← Back to Dashboard</a>
 
 <hr>
 
